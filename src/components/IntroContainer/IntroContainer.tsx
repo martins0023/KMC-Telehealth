@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     background: 'rgb(40, 42, 43)',
-    height: '100%',
+    height: '100vh',
   },
   container: {
     position: 'relative',
@@ -23,10 +23,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   innerContainer: {
     display: 'flex',
     width: '888px',
-    height: '379px',
+    minHeight: '379px',        /* maintain minimum but allow growth */
+    height: 'auto',   
     borderRadius: '8px',
     boxShadow: '0px 2px 4px 0px rgba(40, 42, 43, 0.3)',
-    overflow: 'hidden',
+    // overflow: 'hidden',
     position: 'relative',
     margin: 'auto',
     [theme.breakpoints.down('sm')]: {
