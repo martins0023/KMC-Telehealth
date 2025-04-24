@@ -1,47 +1,39 @@
-// api/token.ts
-import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { AccessToken } from 'twilio';
+import 'dotenv/config';
+import { Request, Response } from 'express';
+import { ServerlessContext, ServerlessFunction } from './types';
+import Twilio from 'twilio';
 
 const {
   TWILIO_ACCOUNT_SID,
   TWILIO_API_KEY_SID,
-  TWILIO_API_KEY_SECRET
+  TWILIO_API_KEY_SECRET,
+  TWILIO_CONVERSATIONS_SERVICE_SID,
+  REACT_APP_TWILIO_ENVIRONMENT,
 } = process.env;
 
-if (!TWILIO_ACCOUNT_SID || !TWILIO_API_KEY_SID || !TWILIO_API_KEY_SECRET) {
-  console.error('Missing Twilio credentials in env');
-  // Always return JSON, even on startup errors
-  throw new Error('Twilio credentials not configured');
-}
+const twilioClient = Twilio(TWILIO_API_KEY_SID, TWILIO_API_KEY_SECRET, {
+  accountSid: TWILIO_ACCOUNT_SID,
+  region: REACT_APP_TWILIO_ENVIRONMENT === 'prod' ? undefined : REACT_APP_TWILIO_ENVIRONMENT,
+});
 
-const VideoGrant = AccessToken.VideoGrant;
+const context: ServerlessContext = {
+  ACCOUNT_SID: TWILIO_ACCOUNT_SID,
+  TWILIO_API_KEY_SID,
+  TWILIO_API_KEY_SECRET,
+  ROOM_TYPE: 'group',
+  CONVERSATIONS_SERVICE_SID: TWILIO_CONVERSATIONS_SERVICE_SID,
+  getTwilioClient: () => twilioClient,
+};
 
-export default async function handler(
-  req: VercelRequest,
-  res: VercelResponse
-): Promise<void> {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
+export function createExpressHandler(serverlessFunction: ServerlessFunction) {
+  return (req: Request, res: Response) => {
+    serverlessFunction(context, req.body, (_, serverlessResponse) => {
+      const { statusCode, headers, body } = serverlessResponse;
 
-  const { identity, room } = req.body as { identity?: string; room?: string };
-  if (!identity || !room) {
-    return res.status(400).json({ error: 'identity and room are required' });
-  }
-
-  try {
-    const token = new AccessToken(
-      TWILIO_ACCOUNT_SID,
-      TWILIO_API_KEY_SID,
-      TWILIO_API_KEY_SECRET,
-      { ttl: 3600 }
-    );
-    token.identity = identity;
-    token.addGrant(new VideoGrant({ room }));
-    return res.status(200).json({ token: token.toJwt() });
-  } catch (err: any) {
-    console.error('Token generation error:', err);
-    // Always return JSON on errors
-    return res.status(500).json({ error: err.message || 'Internal Server Error' });
-  }
+      res
+        .status(statusCode)
+        .set(headers)
+        .json(body);
+    });
+  };
 }
