@@ -92,7 +92,7 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>) {
     contextValue = {
       ...contextValue,
       getToken: async (user_identity, room_name) => {
-        const endpoint = process.env.REACT_APP_TOKEN_ENDPOINT || '/api/token';
+        const endpoint = "https://kmc-telehealth.doctorkays.com/api/token" || '/token';
 
         return fetch(endpoint, {
           method: 'POST',
@@ -107,7 +107,7 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>) {
         }).then(res => res.json());
       },
       updateRecordingRules: async (room_sid, rules) => {
-        const endpoint = process.env.REACT_APP_TOKEN_ENDPOINT || '/api/recordingrules';
+        const endpoint = process.env.REACT_APP_TOKEN_ENDPOINT || '/recordingrules';
 
         return fetch(endpoint, {
           headers: {
