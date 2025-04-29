@@ -60,7 +60,7 @@ export default function MobileTopMenuBar() {
 
   // Fetch consultation details from our backend.
   useEffect(() => {
-    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+    const API_URL = process.env.REACT_APP_API_URL || 'https://doctorkays-backend-1.onrender.com';
     async function fetchConsultation() {
       try {
         const response = await axios.get(`${API_URL}/api/v1/consultations/${roomName}`);
@@ -108,7 +108,7 @@ export default function MobileTopMenuBar() {
   // Periodically revalidate the consultation (every 30 seconds).
   useEffect(() => {
     if (roomName) {
-      const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+      const API_URL = process.env.REACT_APP_API_URL || 'https://doctorkays-backend-1.onrender.com';
       const interval = setInterval(async () => {
         try {
           await axios.get(`${API_URL}/api/v1/consultations/${roomName}`);

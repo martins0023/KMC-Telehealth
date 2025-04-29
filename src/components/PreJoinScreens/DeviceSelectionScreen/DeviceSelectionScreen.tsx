@@ -145,7 +145,7 @@ export default function DeviceSelectionScreen({ name, roomName, setStep }: Devic
 
   // When this screen mounts, fetch the consultation record from your backend.
   useEffect(() => {
-    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+    const API_URL = process.env.REACT_APP_API_URL || 'https://doctorkays-backend-1.onrender.com';
     async function fetchConsultation() {
       try {
         const response = await axios.get(`${API_URL}/api/v1/consultations/${roomName}`);
@@ -192,7 +192,7 @@ export default function DeviceSelectionScreen({ name, roomName, setStep }: Devic
 
   // New handleJoinSubmit function that calls the backend validation endpoint (again) before proceeding.
   const handleJoinSubmit = async () => {
-    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+    const API_URL = process.env.REACT_APP_API_URL || 'https://doctorkays-backend-1.onrender.com';
     try {
       await axios.get(`${API_URL}/api/v1/consultations/${roomName}`);
       // If validation passes, get token and connect.

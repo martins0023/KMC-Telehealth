@@ -77,7 +77,7 @@ export default function JoinRoomScreen({
   const handleJoinSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // Construct your API base URL
-    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+    const API_URL = process.env.REACT_APP_API_URL || 'https://doctorkays-backend-1.onrender.com';
     try {
       // Call the validate endpoint using the roomName.
       await axios.get(`${API_URL}/api/v1/consultations/${roomName}`);

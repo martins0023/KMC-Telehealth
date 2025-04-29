@@ -128,7 +128,7 @@ export default function LinkGenerationScreen({
     if (!isFormValid) return;
 
     // Construct API base URL from environment or fallback.
-    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+    const API_URL = process.env.REACT_APP_API_URL || 'https://doctorkays-backend-1.onrender.com';
     try {
       // Call the backend to create the consultation record.
       const response = await axios.post(`${API_URL}/api/v1/consultations`, {
