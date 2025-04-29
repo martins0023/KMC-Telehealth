@@ -1,13 +1,21 @@
-import { Twilio } from 'twilio';
-import { TwilioResponse } from './bootstrap-globals';
-
+// server/types.ts
 export interface ServerlessContext {
-  getTwilioClient: () => Twilio;
-  [key: string]: any;
+  ACCOUNT_SID: string;
+  TWILIO_API_KEY_SID: string;
+  TWILIO_API_KEY_SECRET: string;
+  ROOM_TYPE: string;
+  CONVERSATIONS_SERVICE_SID?: string;
+  getTwilioClient: () => any;
+}
+
+export interface ServerlessResponse {
+  statusCode: number;
+  headers?: Record<string, string>;
+  body: any;
 }
 
 export type ServerlessFunction = (
   context: ServerlessContext,
-  body: any,
-  callback: (err: any, response: TwilioResponse) => void
+  params: any,
+  callback: (error: unknown, response: ServerlessResponse) => void
 ) => void;
